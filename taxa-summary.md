@@ -1,0 +1,303 @@
+Speeding-up-science-metatranscriptomics-taxa-summary
+================
+Zeya Xue
+5/9/2019
+
+Speeding up science metatranscriptomics taxa summary
+====================================================
+
+-   Written by Zhengyao "Zeya" Xue, [ORCID](https://orcid.org/0000-0002-4930-8212)
+-   The data files and R scripts can be found in this [GitHub repo](https://github.com/zeyaxue/speeding-up-science-binder)
+-   [Launch Binder](https://mybinder.org/v2/gh/zeyaxue/speeding-up-science-binder/master?urlpath=rstudio)
+-   [html version](https://github.com/zeyaxue/speeding-up-science-binder/blob/master/taxa-summary.md)
+
+-   Thumbnail of expected Heatmap
+
+<img src="https://raw.githubusercontent.com/zeyaxue/speeding-up-science-binder/master/figs/taxa_heat_thumb.png" width="50%" />
+
+-   Thumbnail of expected bar plot
+
+<img src="https://raw.githubusercontent.com/zeyaxue/speeding-up-science-binder/master/figs/unnamed-chunk-8-1.png" width="50%" />
+
+-   P.S. The demonstration shown here is using data from [this paper](https://aem.asm.org/content/84/1/e02026-17.short)
+
+Introduction
+------------
+
+The starting point of the workflow is + A count table, normalized or not. Looks like this:
+
+    ##      CDS_ID     Low_A    Low_B   High_A   High_B
+    ## 1   CDS_100 10.980509 8.364332 28.15585 0.000000
+    ## 2 CDS_10011  2.284764 1.522854 10.25240 0.000000
+    ## 3 CDS_10013  9.833839 6.554506  0.00000 0.000000
+    ## 4 CDS_10015  7.194288 2.501831  0.00000 0.000000
+    ## 5 CDS_10016  0.000000 0.000000 44.98916 0.000000
+    ## 6 CDS_10017 18.738610 6.516398  0.00000 7.725487
+
+-   A annotation or taxonomy table
+
+<!-- -->
+
+    ##      CDS_ID KO_ID  Domain        Phylum           Class              Order
+    ## 1  CDS_2383  <NA> Archaea Euryarchaeota    Methanococci    Methanococcales
+    ## 2  CDS_4184  <NA> Archaea Euryarchaeota Methanomicrobia  Methanosarcinales
+    ## 3  CDS_6601  <NA> Archaea Euryarchaeota Methanomicrobia  Methanosarcinales
+    ## 4  CDS_6904  <NA> Archaea Euryarchaeota    Methanococci    Methanococcales
+    ## 5  CDS_7927  <NA> Archaea Euryarchaeota    Halobacteria       Natrialbales
+    ## 6 CDS_15355  <NA> Archaea Euryarchaeota Methanomicrobia Methanomicrobiales
+    ##                  Family              Genus                     Species
+    ## 1 Methanocaldococcaceae Methanocaldococcus Methanocaldococcus_infernus
+    ## 2    Methanosarcinaceae     Methanosarcina      Methanosarcina_barkeri
+    ## 3    Methanosarcinaceae     Methanosarcina      Methanosarcina_barkeri
+    ## 4      Methanococcaceae      Methanococcus     Methanococcus_vannielii
+    ## 5         Natrialbaceae      Haloterrigena      Haloterrigena_jeotgali
+    ## 6   Methanomicrobiaceae     Methanolacinia  Methanolacinia_petrolearia
+
+-   A sample metainfo table
+
+<!-- -->
+
+    ##   SampleID Place Group
+    ## 1   High_A  High     A
+    ## 2   High_B  High     B
+    ## 3    Low_A   Low     A
+    ## 4    Low_B   Low     B
+
+Load packages and setting up
+----------------------------
+
+``` r
+library(phyloseq);packageVersion("phyloseq")
+```
+
+    ## [1] '1.22.3'
+
+``` r
+library(DESeq2);packageVersion("DESeq2")
+```
+
+    ## [1] '1.18.1'
+
+``` r
+library(ggplot2)
+library(reshape2)
+library(superheat)
+library(plyr)
+library(dplyr)
+library(RColorBrewer)
+```
+
+Import files to create phyloseq object
+--------------------------------------
+
+``` r
+# The otu table slot of phyloseq object 
+TabTPM <- read.table(file.path("example_data/sample_TPM.tsv"),
+                     header = TRUE, sep = "\t")
+row.names(TabTPM) <- TabTPM$CDS_ID
+TabTPM <- TabTPM[,-1]
+TabTPM <- as.matrix.data.frame(TabTPM)
+
+# The tax table slot of phyloseq object
+Tabanno <- read.table(file.path("example_data/sample_annotation_classifications.tsv"),
+                      header = TRUE, sep = "\t", na.strings = "<NA>")
+rownames(Tabanno) <- Tabanno$CDS_ID
+Tabanno <- Tabanno[,c(-1,-2)] # remove CDS_ID and KOID
+Tabanno <- as.matrix.data.frame(Tabanno)
+
+# The sample data slot of phyloseq object
+samdf <- read.csv(file.path("example_data/Samdf.csv"))
+```
+
+    ## Warning in read.table(file = file, header = header, sep = sep, quote =
+    ## quote, : incomplete final line found by readTableHeader on 'example_data/
+    ## Samdf.csv'
+
+``` r
+rownames(samdf) <- samdf$SampleID
+
+ps <- phyloseq(otu_table(TabTPM, taxa_are_rows = TRUE), 
+               tax_table(Tabanno), sample_data(samdf))
+ps # 20000 taxa and 4 samples
+```
+
+    ## phyloseq-class experiment-level object
+    ## otu_table()   OTU Table:         [ 20000 taxa and 4 samples ]
+    ## sample_data() Sample Data:       [ 4 samples by 3 sample variables ]
+    ## tax_table()   Taxonomy Table:    [ 20000 taxa by 7 taxonomic ranks ]
+
+Optional taxonomy level clean up
+--------------------------------
+
+``` r
+# Define function to get the deepest taxa assignment level
+RECps <- function(ps) {
+  TaxTab2 <- as.data.frame(ps@tax_table)
+  
+  list.s = as.character(TaxTab2$Species)
+  list.g = as.character(TaxTab2$Genus)
+  list.f = as.character(TaxTab2$Family)
+  list.o = as.character(TaxTab2$Order)
+  list.c = as.character(TaxTab2$Class)
+  list.p = as.character(TaxTab2$Phylum)
+  list.k = as.character(TaxTab2$Kingdom)
+  list.d = as.character(TaxTab2$Domain)
+  list.REC = character(length(as.character(TaxTab2$Domain)))
+  
+  for(i in 1:dim(TaxTab2)[1]){
+    S = which(TaxTab2$Species[i] == "" | is.na(TaxTab2$Species[i]))
+    G = which(TaxTab2$Genus[i] == "" | is.na(TaxTab2$Genus[i]))
+    Fa = which(TaxTab2$Family[i] == "" | is.na(TaxTab2$Family[i]))
+    O = which(TaxTab2$Order[i] == "" | is.na(TaxTab2$Order[i]))
+    C = which(TaxTab2$Class[i] == "" | is.na(TaxTab2$Class[i]))
+    P = which(TaxTab2$Phylum[i] == "" | is.na(TaxTab2$Phylum[i]))
+    K = which(TaxTab2$Kingdom[i] == "" | is.na(TaxTab2$Kingdom[i]))
+    D = which(TaxTab2$Domain[i] == "" | is.na(TaxTab2$Domain[i]))
+    if(length(S) == 0){
+      list.REC[i] <- list.s[i]
+    } else if(length(G) == 0){
+      list.REC[i] <- list.g[i]
+    } else if(length(Fa) == 0){
+      list.REC[i] <- list.f[i]
+    } else if(length(O) == 0){
+      list.REC[i] <- list.o[i]
+    } else if(length(C) == 0){
+      list.REC[i] <- list.c[i]
+    } else if(length(P) == 0){
+      list.REC[i] <- list.p[i]
+    } else if(length(K) == 0){
+      list.REC[i] <- list.k[i]
+    } else if(length(D) == 0){
+      list.REC[i] <- list.d[i]
+    } else {
+      list.REC[i] <- "meow"
+    }
+  }
+  
+  TaxTab2$REC <- list.REC
+  TaxTab2$REC <- factor(TaxTab2$REC)
+  phyloseq(otu_table(ps), sample_data(ps),
+           TaxTab2 %>% as.matrix() %>% tax_table())
+}
+
+ps.REC <- RECps(ps)
+ps.REC # 20000 taxa and 4 samples 
+```
+
+    ## phyloseq-class experiment-level object
+    ## otu_table()   OTU Table:         [ 20000 taxa and 4 samples ]
+    ## sample_data() Sample Data:       [ 4 samples by 3 sample variables ]
+    ## tax_table()   Taxonomy Table:    [ 20000 taxa by 8 taxonomic ranks ]
+
+Heat map
+--------
+
+``` r
+# Clean up the taxonomy 
+ps.REC.glom <- ps.REC %>% tax_glom(taxrank = "REC", NArm = FALSE)
+# Run the next line if want relative abundance 
+ps.REC.per <- ps.REC.glom %>% transform_sample_counts(function(x) x/sum(x) )  
+taxa.df <- psmelt(ps.REC.per)  # melt ps object 
+# aggregate for REC level plot
+taxa.agg <- aggregate(Abundance ~ REC + SampleID,
+                      data = taxa.df,
+                      mean)
+taxa.cast <- dcast(taxa.agg, REC ~ SampleID, mean, value.var = "Abundance")
+
+# Define palette 
+my_palette <- colorRampPalette(c("red", "yellow", "green"))(n = 299)
+# defines the color breaks manually for a "skewed" color transition
+col_breaks = c(seq(-1,0,length=100),      # for red
+               seq(0.01,0.8,length=100),  # for yellow
+               seq(0.81,1,length=100))    # for green
+
+# only plot the top 30 most abundant taxa 
+# need to change results from factor to numeric because of R
+row.names(taxa.cast) <- taxa.cast$REC
+taxa.cast <- taxa.cast[, -1]
+indx <- sapply(taxa.cast, is.factor)
+taxa.cast[indx] <- lapply(taxa.cast[indx], function(x) as.numeric(as.character(x))) 
+taxa.cast30 <- cbind(taxa.cast, total = rowSums(taxa.cast)) #  need numeric values
+taxa.cast30$taxa <- rownames(taxa.cast30)
+taxa.cast30 <- head(arrange(taxa.cast30,desc(total)), n = 30)
+```
+
+    ## Warning: package 'bindrcpp' was built under R version 3.4.4
+
+``` r
+row.names(taxa.cast30) <- taxa.cast30$taxa
+taxa.cast30 <- taxa.cast30[, -c(5,6)] # remove total and taxa name colums
+  
+superheat(taxa.cast30,
+          # retain original order of rows/cols
+          pretty.order.rows = TRUE,
+          pretty.order.cols = TRUE,
+          row.dendrogram = TRUE,
+          col.dendrogram = TRUE,
+          grid.hline = TRUE,
+          row.title = "Annotation",
+          column.title = "SampleID",
+          left.label.text.size = 4,
+          bottom.label.text.size = 5,
+          left.label.size = 0.5,
+          # change the grid color to white (more pretty on a dark background)
+          grid.hline.col = "white",
+          grid.vline.col = "white") 
+```
+
+![](figs/unnamed-chunk-9-1.png)
+
+Stack bar plot
+--------------
+
+``` r
+# Clean up the taxonomy 
+ps.REC.glom <- ps.REC %>% tax_glom(taxrank = "REC", NArm = FALSE)
+# Run the next line if want relative abundance 
+ps.REC.per <- ps.REC.glom %>% transform_sample_counts(function(x) x/sum(x) )  
+taxa.df <- psmelt(ps.REC.per)  # melt ps object 
+# aggregate for REC level plot
+taxa.agg <- aggregate(Abundance ~ REC + SampleID,
+                      data = taxa.df,
+                      mean)
+
+# Get the names of the most abundant 15 taxa 
+ps.Notop15 <- prune_taxa(names(sort(taxa_sums(ps.REC.per), TRUE)[16:nrow(ps.REC.per@tax_table)]), ps.REC.per)
+taxa_names_filt <- ps.Notop15@tax_table[,8] %>% as.character() # 8 for REC level 
+# convert REC colum to a character vector from a factor because R
+taxa.agg$REC <- as.character(taxa.agg$REC)
+# change the less abundant taxa names to "Other"
+taxa.agg[taxa.agg$REC %in% taxa_names_filt,]$REC <- "Other"
+
+# Set colors for plotting
+mycol = colorRampPalette(brewer.pal(12, "Paired"))(16)
+
+# Set levels of taxon for pretty plots 
+## I do not know this beforehand, modified after 1st generating plot to know the 
+## taxa names
+taxa.agg$REC = factor(taxa.agg$REC, levels = c("Alteromonas_macleodii",
+                                               "Anaerophaga_thermohalophila",
+                                               "Aureispira_sp._CCB-QB1",
+                                               "Bacteroides_fragilis",
+                                               "Dyadobacter_alkalitolerans",
+                                               "Escherichia_coli",
+                                               "Haliscomenobacter_hydrossis",
+                                               "Lacinutrix_himadriensis",
+                                               "Lewinella_cohaerens",
+                                               "Nitrosomonas_communis",
+                                               "Phaeodactylibacter_xiamenensis",
+                                               "Salinibacter_ruber",
+                                               "Saprospira_grandis",
+                                                "Synechococcus_sp._BL107",
+                                                "Synechococcus_sp._CC9605",
+                                                "Other"))
+
+ggplot(taxa.agg, aes(x = SampleID, y = Abundance, fill = REC)) + 
+  geom_bar(stat = "identity") +  #position = "fill" is for making the bar 100% 
+  scale_fill_manual(values = mycol)+
+  theme(axis.title.x = element_blank()) +   # Remove x axis title
+  guides(fill = guide_legend(reverse = FALSE, keywidth = 1, keyheight = 1)) +
+  ylab("Relative Abundance \n")
+```
+
+![](figs/unnamed-chunk-10-1.png)
