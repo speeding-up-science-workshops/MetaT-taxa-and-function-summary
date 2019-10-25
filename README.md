@@ -4,11 +4,6 @@
 
 This repo contains data and codes to visualize taxa and KEGG functions as bar plots or heatmaps (with clustering). 
 
-Speeding-up-science-metatranscriptomics-taxa-summary
-================
-Zeya Xue
-5/9/2019
-====================================================
 
 -   Written by Zhengyao "Zeya" Xue, [ORCID](https://orcid.org/0000-0002-4930-8212)
 -   The data files and R scripts can be found in this [GitHub repo](https://github.com/zeyaxue/speeding-up-science-binder)
