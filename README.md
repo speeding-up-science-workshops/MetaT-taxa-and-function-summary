@@ -17,11 +17,11 @@ Zeya Xue
 
 -   Thumbnail of expected Heatmap
 
-<img src="https://raw.githubusercontent.com/zeyaxue/speeding-up-science-binder/master/figs/taxa_heat_thumb.png" width="50%" />
+<img src="https://raw.githubusercontent.com/zeyaxue/speeding-up-sci-heatmap-barplot/master/figs/taxa_heat_thumb.png" width="50%" />
 
 -   Thumbnail of expected bar plot
 
-<img src="https://raw.githubusercontent.com/zeyaxue/speeding-up-science-binder/master/figs/unnamed-chunk-8-1.png" width="50%" />
+<img src="https://raw.githubusercontent.com/zeyaxue/speeding-up-sci-heatmap-barplot/master/figs/taxa_bar_thumb.png" width="50%" />
 
 -   P.S. The demonstration shown here is using data from [this paper](https://aem.asm.org/content/84/1/e02026-17.short)
 
