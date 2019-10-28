@@ -7,7 +7,8 @@ Visualization codes from the first "speeding up science workshop". This reposito
 
 ## Quick Start
 - Once the [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/zeyaxue/speeding-up-sci-heatmap-barplot/master?urlpath=rstudio) is started, user will enter a virtual Rstudio interface. 
-- User can either excute the codes with included samples by clicking on the "function-summary.Rmd" and "taxa-summary.rmd" scripts or upload new data files by clicking the `Upload` button at the xxx .
+- User can either excute the codes with included samples by clicking on the "function-summary.Rmd" and "taxa-summary.rmd" scripts or upload new data files by clicking the `Upload` button at the lower right panel.
+- To save a rendered html output, user can click the `knitr` button at the upper left panel.
 
 ## Example Input
 #### 1. A count table with either gene or taxonomy profile per sample. 
