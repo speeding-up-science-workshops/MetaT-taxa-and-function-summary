@@ -7,19 +7,19 @@ Visualization codes from the first "speeding up science workshop". This reposito
 
 ## Quick Start
 - Once the [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/zeyaxue/speeding-up-sci-heatmap-barplot/master) is started, user will enter a virtual Rstudio interface. 
-- User can either excute the codes with included samples by clicking on the "" and "" scripts or upload new data files by clicking the `Upload` button at the xxx .
+- User can either excute the codes with included samples by clicking on the "function-summary.Rmd" and "taxa-summary.rmd" scripts or upload new data files by clicking the `Upload` button at the xxx .
 
 ## Example Input
-#### 1. A count table containing genes found in both DNA and RNA sequencing result
-The starting point of the workflow is + A count table, normalized or not. Looks like this:
+#### 1. A count table with either gene or taxonomy profile per sample. 
+If the user want to normalize the count table, user can run the "raw-to-TPM-conversion.R" script.
 
-    ##      CDS_ID     Low_A    Low_B   High_A   High_B
-    ## 1   CDS_100 10.980509 8.364332 28.15585 0.000000
-    ## 2 CDS_10011  2.284764 1.522854 10.25240 0.000000
-    ## 3 CDS_10013  9.833839 6.554506  0.00000 0.000000
-    ## 4 CDS_10015  7.194288 2.501831  0.00000 0.000000
-    ## 5 CDS_10016  0.000000 0.000000 44.98916 0.000000
-    ## 6 CDS_10017 18.738610 6.516398  0.00000 7.725487
+|       | CDS_ID     | Low_A     | Low_B    | High_A   | High_B   |
+|------:|:-----------|-----------|----------|---------:|---------:|
+|     0 |    CDS_100 | 10.980509 | 8.364332 | 28.15585 | 0.000000 |
+|     1 |  CDS_10011 |  2.284764 | 1.522854 | 10.25240 | 0.000000 |
+|     2 |  CDS_10013 |  9.833839 | 6.554506 |  0.00000 | 0.000000 |
+|     3 |  CDS_10015 |  7.194288 | 2.501831 |  0.00000 | 0.000000 |
+|     4 |  CDS_10016 |  0.000000 | 0.000000 | 44.98916 | 0.000000 |
 
 -   A annotation or taxonomy table
 
