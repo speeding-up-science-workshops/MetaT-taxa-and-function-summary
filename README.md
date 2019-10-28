@@ -12,7 +12,7 @@ Visualization codes from the first "speeding up science workshop". This reposito
 
 ## Example Input
 #### 1. A count table with either gene or taxonomy profile per sample. 
-If the user want to normalize the count table, user can run the "raw-to-TPM-conversion.R" script.
+If the user want to normalize the count table, the "raw-to-TPM-conversion.R" script was included in this Binder.
 
 |       | CDS_ID     | Low_A     | Low_B    | High_A   | High_B   |
 |------:|:-----------|-----------|----------|---------:|---------:|
