@@ -1,9 +1,14 @@
-# speeding up science metatranscriptomics binder
+# speeding up science metatranscriptomics heatmap and stacked bar plot visualization 
 
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/zeyaxue/speeding-up-science-binder/master?urlpath=rstudio)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/zeyaxue/speeding-up-sci-heatmap-barplot/master)  
 
-This repo contains data and codes to visualize taxa and KEGG functions as bar plots or heatmaps (with clustering). 
+## Summary
+Visualization codes from the first "speeding up science workshop". This repository contains codes to make heatmap and stacked bar plots for metatranscriptomic function and RNA-based taxonomy summaries. The demonstration shown here is using data from [this paper](https://aem.asm.org/content/84/1/e02026-17.short)
 
+## Quick Start
+- Once the [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/zeyaxue/speeding-up-sci-heatmap-barplot/master) is started, user will enter a virtual Rstudio interface. 
+- You can either excute the codes with included samples by clicking on the "" and "" scripts.
+- 
 
 -   Written by Zhengyao "Zeya" Xue, [ORCID](https://orcid.org/0000-0002-4930-8212)
 -   The data files and R scripts can be found in this [GitHub repo](https://github.com/zeyaxue/speeding-up-science-binder)
@@ -18,7 +23,7 @@ This repo contains data and codes to visualize taxa and KEGG functions as bar pl
 
 <img src="https://raw.githubusercontent.com/zeyaxue/speeding-up-sci-heatmap-barplot/master/figs/taxa_bar_thumb.png" width="50%" />
 
--   P.S. The demonstration shown here is using data from [this paper](https://aem.asm.org/content/84/1/e02026-17.short)
+
 
 Introduction
 ------------
