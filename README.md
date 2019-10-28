@@ -1,6 +1,6 @@
 # Metatranscriptomics heatmap and stacked bar plot visualization 
 
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/zeyaxue/speeding-up-sci-heatmap-barplot/master?urlpath=rstudio)  
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/zeyaxue/speeding-up-sci-heatmap-barplot/master?urlpath=rstudio)    [![DOI](https://zenodo.org/badge/185875836.svg)](https://zenodo.org/badge/latestdoi/185875836)
 
 ## Summary
 Visualization codes from the first "speeding up science workshop". This repository contains codes to make heatmap and stacked bar plots for metatranscriptomic function and RNA-based taxonomy summaries. The demonstration shown here is using data from [this paper](https://aem.asm.org/content/84/1/e02026-17.short) by [Michael D. Lee](https://orcid.org/0000-0001-7750-9145).
@@ -55,7 +55,7 @@ If the user want to normalize the count table, the "raw-to-TPM-conversion.R" scr
  - Zhengyao "Zeya" Xue, Github ID [@zeyaxue](https://github.com/zeyaxue) and [ORCID](https://orcid.org/0000-0002-4930-8212) 
 
 ## Links
-- Zenodo Binder: 
+- Zenodo Binder: [![DOI](https://zenodo.org/badge/185875836.svg)](https://zenodo.org/badge/latestdoi/185875836)
 - Github Binder: [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/zeyaxue/speeding-up-sci-heatmap-barplot/master) 
 - Github Repository: https://github.com/zeyaxue/speeding-up-sci-heatmap-barplot
 
