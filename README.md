@@ -7,27 +7,10 @@ Visualization codes from the first "speeding up science workshop". This reposito
 
 ## Quick Start
 - Once the [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/zeyaxue/speeding-up-sci-heatmap-barplot/master) is started, user will enter a virtual Rstudio interface. 
-- You can either excute the codes with included samples by clicking on the "" and "" scripts.
-- 
+- User can either excute the codes with included samples by clicking on the "" and "" scripts or upload new data files by clicking the `Upload` button at the xxx .
 
--   Written by Zhengyao "Zeya" Xue, [ORCID](https://orcid.org/0000-0002-4930-8212)
--   The data files and R scripts can be found in this [GitHub repo](https://github.com/zeyaxue/speeding-up-science-binder)
--   [Launch Binder](https://mybinder.org/v2/gh/zeyaxue/speeding-up-science-binder/master?urlpath=rstudio)
--   [html version](https://github.com/zeyaxue/speeding-up-science-binder/blob/master/taxa-summary.md)
-
--   Thumbnail of expected Heatmap
-
-<img src="https://raw.githubusercontent.com/zeyaxue/speeding-up-sci-heatmap-barplot/master/figs/taxa_heat_thumb.png" width="50%" />
-
--   Thumbnail of expected bar plot
-
-<img src="https://raw.githubusercontent.com/zeyaxue/speeding-up-sci-heatmap-barplot/master/figs/taxa_bar_thumb.png" width="50%" />
-
-
-
-Introduction
-------------
-
+## Example Input
+#### 1. A count table containing genes found in both DNA and RNA sequencing result
 The starting point of the workflow is + A count table, normalized or not. Looks like this:
 
     ##      CDS_ID     Low_A    Low_B   High_A   High_B
@@ -66,3 +49,28 @@ The starting point of the workflow is + A count table, normalized or not. Looks 
     ## 2   High_B  High     B
     ## 3    Low_A   Low     A
     ## 4    Low_B   Low     B
+
+
+
+
+
+-   Written by Zhengyao "Zeya" Xue, [ORCID](https://orcid.org/0000-0002-4930-8212)
+-   The data files and R scripts can be found in this [GitHub repo](https://github.com/zeyaxue/speeding-up-science-binder)
+-   [Launch Binder](https://mybinder.org/v2/gh/zeyaxue/speeding-up-science-binder/master?urlpath=rstudio)
+-   [html version](https://github.com/zeyaxue/speeding-up-science-binder/blob/master/taxa-summary.md)
+
+-   Thumbnail of expected Heatmap
+
+<img src="https://raw.githubusercontent.com/zeyaxue/speeding-up-sci-heatmap-barplot/master/figs/taxa_heat_thumb.png" width="50%" />
+
+-   Thumbnail of expected bar plot
+
+<img src="https://raw.githubusercontent.com/zeyaxue/speeding-up-sci-heatmap-barplot/master/figs/taxa_bar_thumb.png" width="50%" />
+
+
+
+Introduction
+------------
+
+
+
