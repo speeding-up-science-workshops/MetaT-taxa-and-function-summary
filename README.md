@@ -1,12 +1,12 @@
 # Metatranscriptomics heatmap and stacked bar plot visualization 
 
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/zeyaxue/speeding-up-sci-heatmap-barplot/master/)  
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/zeyaxue/speeding-up-sci-heatmap-barplot/master?urlpath=rstudio)  
 
 ## Summary
 Visualization codes from the first "speeding up science workshop". This repository contains codes to make heatmap and stacked bar plots for metatranscriptomic function and RNA-based taxonomy summaries. The demonstration shown here is using data from [this paper](https://aem.asm.org/content/84/1/e02026-17.short) by [Michael D. Lee](https://orcid.org/0000-0001-7750-9145).
 
 ## Quick Start
-- Once the [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/zeyaxue/speeding-up-sci-heatmap-barplot/master) is started, user will enter a virtual Rstudio interface. 
+- Once the [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/zeyaxue/speeding-up-sci-heatmap-barplot/master?urlpath=rstudio) is started, user will enter a virtual Rstudio interface. 
 - User can either excute the codes with included samples by clicking on the "function-summary.Rmd" and "taxa-summary.rmd" scripts or upload new data files by clicking the `Upload` button at the xxx .
 
 ## Example Input
