@@ -1,15 +1,48 @@
-# speeding up science metatranscriptomics binder
+# Metatranscriptomics heatmap and stacked bar plot visualization 
 
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/zeyaxue/speeding-up-science-binder/master?urlpath=rstudio)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/zeyaxue/speeding-up-sci-heatmap-barplot/master?urlpath=rstudio)    [![DOI](https://zenodo.org/badge/185875836.svg)](https://zenodo.org/badge/latestdoi/185875836)
 
-This repo contains data and codes to visualize taxa and KEGG functions as bar plots or heatmaps (with clustering). 
+## Summary
+Visualization codes from the first "speeding up science workshop". This repository contains codes to make heatmap and stacked bar plots for metatranscriptomic function and RNA-based taxonomy summaries. The demonstration shown here is using data from [this paper](https://aem.asm.org/content/84/1/e02026-17.short) by [Michael D. Lee](https://orcid.org/0000-0001-7750-9145).
+
+## Quick Start
+- Once the [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/zeyaxue/speeding-up-sci-heatmap-barplot/master?urlpath=rstudio) is started, user will enter a virtual Rstudio interface. 
+- User can either excute the codes with included samples by clicking on the "function-summary.Rmd" and "taxa-summary.rmd" scripts or upload new data files by clicking the `Upload` button at the lower right panel.
+- To save a rendered html output, user can click the `knitr` button at the upper left panel.
+
+## Example Input
+#### 1. A count table with either gene or taxonomy profile per sample. 
+If the user want to normalize the count table, the "raw-to-TPM-conversion.R" script is included in this Binder to perform such task.
+
+|       | CDS_ID     | Low_A     | Low_B    | High_A   | High_B   |
+|------:|:-----------|-----------|----------|---------:|---------:|
+|     1 |    CDS_100 | 10.980509 | 8.364332 | 28.15585 | 0.000000 |
+|     2 |  CDS_10011 |  2.284764 | 1.522854 | 10.25240 | 0.000000 |
+|     3 |  CDS_10013 |  9.833839 | 6.554506 |  0.00000 | 0.000000 |
+|     4 |  CDS_10015 |  7.194288 | 2.501831 |  0.00000 | 0.000000 |
+|     5 |  CDS_10016 |  0.000000 | 0.000000 | 44.98916 | 0.000000 |
+
+#### 2. A taxonomy or KEGG annotation table.
+
+|       |   CDS_ID |  Domain |        Phylum|           Class|              Order |                Family |              Genus|                      Species|
+|------:|:---------|---------|--------------|----------------|--------------------|-----------------------|------------------:|----------------------------:|
+|     1 | CDS_2383 | Archaea | Euryarchaeota|    Methanococci|    Methanococcales | Methanocaldococcaceae | Methanocaldococcus|  Methanocaldococcus_infernus|
+|     2 | CDS_4184 | Archaea | Euryarchaeota| Methanomicrobia|  Methanosarcinales |    Methanosarcinaceae |     Methanosarcina|       Methanosarcina_barkeri|
+|     3 | CDS_6601 | Archaea | Euryarchaeota| Methanomicrobia|  Methanosarcinales |    Methanosarcinaceae |     Methanosarcina|       Methanosarcina_barkeri|
+|     4 | CDS_6904 | Archaea | Euryarchaeota|    Methanococci|    Methanococcales |      Methanococcaceae |      Methanococcus|      Methanococcus_vannielii|
+|     5 | CDS_7927 | Archaea | Euryarchaeota|    Halobacteria|       Natrialbales |         Natrialbaceae |      Haloterrigena|       Haloterrigena_jeotgali|
+
+#### 3. A sample metainfo table
+
+|       | SampleID| Place |Group|
+|------:|:--------|------:|----:|
+|     1 |  High_A | High  |    A|
+|     2 |  High_B | High  |    B|
+|     3 |   Low_A |  Low  |    A|
+|     4 |   Low_B |  Low  |    B|
 
 
--   Written by Zhengyao "Zeya" Xue, [ORCID](https://orcid.org/0000-0002-4930-8212)
--   The data files and R scripts can be found in this [GitHub repo](https://github.com/zeyaxue/speeding-up-science-binder)
--   [Launch Binder](https://mybinder.org/v2/gh/zeyaxue/speeding-up-science-binder/master?urlpath=rstudio)
--   [html version](https://github.com/zeyaxue/speeding-up-science-binder/blob/master/taxa-summary.md)
-
+## Example Output
 -   Thumbnail of expected Heatmap
 
 <img src="https://raw.githubusercontent.com/zeyaxue/speeding-up-sci-heatmap-barplot/master/figs/taxa_heat_thumb.png" width="50%" />
@@ -18,46 +51,14 @@ This repo contains data and codes to visualize taxa and KEGG functions as bar pl
 
 <img src="https://raw.githubusercontent.com/zeyaxue/speeding-up-sci-heatmap-barplot/master/figs/taxa_bar_thumb.png" width="50%" />
 
--   P.S. The demonstration shown here is using data from [this paper](https://aem.asm.org/content/84/1/e02026-17.short)
+## Author
+ - Zhengyao "Zeya" Xue, Github ID [@zeyaxue](https://github.com/zeyaxue) and [ORCID](https://orcid.org/0000-0002-4930-8212) 
 
-Introduction
-------------
+## Links
+- Zenodo Binder: [![DOI](https://zenodo.org/badge/185875836.svg)](https://zenodo.org/badge/latestdoi/185875836)
+- Github Binder: [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/zeyaxue/speeding-up-sci-heatmap-barplot/master) 
+- Github Repository: https://github.com/zeyaxue/speeding-up-sci-heatmap-barplot
 
-The starting point of the workflow is + A count table, normalized or not. Looks like this:
 
-    ##      CDS_ID     Low_A    Low_B   High_A   High_B
-    ## 1   CDS_100 10.980509 8.364332 28.15585 0.000000
-    ## 2 CDS_10011  2.284764 1.522854 10.25240 0.000000
-    ## 3 CDS_10013  9.833839 6.554506  0.00000 0.000000
-    ## 4 CDS_10015  7.194288 2.501831  0.00000 0.000000
-    ## 5 CDS_10016  0.000000 0.000000 44.98916 0.000000
-    ## 6 CDS_10017 18.738610 6.516398  0.00000 7.725487
 
--   A annotation or taxonomy table
 
-<!-- -->
-
-    ##      CDS_ID KO_ID  Domain        Phylum           Class              Order
-    ## 1  CDS_2383  <NA> Archaea Euryarchaeota    Methanococci    Methanococcales
-    ## 2  CDS_4184  <NA> Archaea Euryarchaeota Methanomicrobia  Methanosarcinales
-    ## 3  CDS_6601  <NA> Archaea Euryarchaeota Methanomicrobia  Methanosarcinales
-    ## 4  CDS_6904  <NA> Archaea Euryarchaeota    Methanococci    Methanococcales
-    ## 5  CDS_7927  <NA> Archaea Euryarchaeota    Halobacteria       Natrialbales
-    ## 6 CDS_15355  <NA> Archaea Euryarchaeota Methanomicrobia Methanomicrobiales
-    ##                  Family              Genus                     Species
-    ## 1 Methanocaldococcaceae Methanocaldococcus Methanocaldococcus_infernus
-    ## 2    Methanosarcinaceae     Methanosarcina      Methanosarcina_barkeri
-    ## 3    Methanosarcinaceae     Methanosarcina      Methanosarcina_barkeri
-    ## 4      Methanococcaceae      Methanococcus     Methanococcus_vannielii
-    ## 5         Natrialbaceae      Haloterrigena      Haloterrigena_jeotgali
-    ## 6   Methanomicrobiaceae     Methanolacinia  Methanolacinia_petrolearia
-
--   A sample metainfo table
-
-<!-- -->
-
-    ##   SampleID Place Group
-    ## 1   High_A  High     A
-    ## 2   High_B  High     B
-    ## 3    Low_A   Low     A
-    ## 4    Low_B   Low     B
