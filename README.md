@@ -1,8 +1,5 @@
 # Metatranscriptomics heatmap and stacked bar plot visualization 
 
-[![DOI](https://zenodo.org/badge/217616874.svg)](https://zenodo.org/badge/latestdoi/217616874)
-
-
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/zeyaxue/speeding-up-sci-heatmap-barplot/master?urlpath=rstudio)    [![DOI](https://zenodo.org/badge/185875836.svg)](https://zenodo.org/badge/latestdoi/185875836)
 
 ## Summary
